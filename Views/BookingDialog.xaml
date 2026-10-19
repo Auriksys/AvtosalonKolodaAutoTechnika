@@ -1,0 +1,45 @@
+<Window x:Class="FDNJ_CSharp.Views.BookingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Новое бронирование"
+        Height="440" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{StaticResource BgBrush}">
+
+    <Border Background="{StaticResource CardBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="12"
+            Margin="20"
+            Padding="25">
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Бронирование автомобиля"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextPrimaryBrush}"
+                       Margin="0,0,0,16"/>
+
+            <TextBlock Text="ВЫБОР АВТОМОБИЛЯ (В НАЛИЧИИ) *" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,5"/>
+            <ComboBox x:Name="CarComboBox" Height="38" Margin="0,0,0,12"/>
+
+            <TextBlock Text="КЛИЕНТ *" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,5"/>
+            <ComboBox x:Name="ClientComboBox" Height="38" Margin="0,0,0,12"/>
+
+            <TextBlock Text="СРОК ДЕЙСТВИЯ БРОНИ (ДО ДАТЫ) *" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,5"/>
+            <DatePicker x:Name="ExpirationDatePicker" Height="38" Margin="0,0,0,22"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Отмена"
+                        Style="{StaticResource OutlineButtonStyle}"
+                        Width="100"
+                        Margin="0,0,10,0"
+                        Click="Cancel_Click"/>
+                <Button Content="Забронировать"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Width="150"
+                        Click="Save_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

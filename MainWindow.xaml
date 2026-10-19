@@ -1,0 +1,1446 @@
+<Window x:Class="FDNJ_CSharp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DRIVE v3 — Система управления автосалоном"
+        Height="900" Width="1480"
+        MinHeight="760" MinWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ================= SIDEBAR ================= -->
+        <Border Grid.Column="0"
+                Background="{StaticResource SidebarBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Brand Header -->
+                <Border Grid.Row="0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="20,18">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Background="#1E3A8A" CornerRadius="8" Width="36" Height="36" Margin="0,0,12,0"
+                                    BorderBrush="{StaticResource AccentBlueBrush}" BorderThickness="1">
+                                <Path Fill="{StaticResource AccentBlueBrush}"
+                                      Width="20" Height="20" Stretch="Uniform"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Data="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="DRIVE" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentBlueBrush}"/>
+                                    <Border Background="#064E3B" CornerRadius="4" Padding="5,1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="PRO v3.5" FontSize="9" FontWeight="Bold" Foreground="{StaticResource AccentGreenBrush}"/>
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock Text="СИСТЕМА УЧЁТА АВТОСАЛОНА" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" Margin="0,1,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Menu Buttons -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,8">
+                        <TextBlock Text="ОСНОВНЫЕ РАЗДЕЛЫ" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" Margin="22,6,0,6"/>
+                        <RadioButton x:Name="NavDashboard" Content="  📊  Панель управления"
+                                     Style="{StaticResource NavButtonStyle}" IsChecked="True"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavCars" Content="  🚗  Автомобили (Склад)"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavSales" Content="  💳  Продажи и сделки"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavBookings" Content="  📅  Бронирования"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+
+                        <TextBlock Text="КОНТРАГЕНТЫ И ОТЧЁТЫ" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" Margin="22,12,0,6"/>
+                        <RadioButton x:Name="NavClients" Content="  👥  Клиентская база"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavSuppliers" Content="  🏢  Поставщики"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavReports" Content="  📈  Отчёты и Экспорт"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+
+                        <TextBlock Text="СИСТЕМА И КОНТРОЛЬ" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" Margin="22,12,0,6"/>
+                        <RadioButton x:Name="NavUsers" Content="  👤  Сотрудники"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                        <RadioButton x:Name="NavHistory" Content="  🕒  Журнал операций"
+                                     Style="{StaticResource NavButtonStyle}"
+                                     Click="Nav_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Sidebar Live Dealership Pulse Widget (Eliminates Sidebar Empty Space) -->
+                <Border Grid.Row="2"
+                        Background="{StaticResource CardBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Margin="14,6,14,12"
+                        Padding="12">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,6">
+                            <TextBlock Text="⚡ ПУЛЬС АВТОСАЛОНА" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}"/>
+                            <Border Background="#064E3B" CornerRadius="4" Padding="5,1" HorizontalAlignment="Right">
+                                <TextBlock Text="ONLINE" FontSize="8.5" FontWeight="Bold" Foreground="{StaticResource AccentGreenBrush}"/>
+                            </Border>
+                        </Grid>
+
+                        <Grid Margin="0,3">
+                            <TextBlock Text="Стоимость склада:" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock x:Name="SidebarStockValue" Text="0 ₽" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,3">
+                            <TextBlock Text="Средний чек сделки:" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock x:Name="SidebarAvgSale" Text="0 ₽" FontSize="11" FontWeight="Bold" Foreground="{StaticResource AccentGreenBrush}" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,3,0,8">
+                            <TextBlock Text="Активных клиентов:" FontSize="11" Foreground="{StaticResource TextMutedBrush}"/>
+                            <TextBlock x:Name="SidebarClientsCount" Text="0" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+
+                        <Button Content="💳 Быстрое оформление сделки"
+                                Style="{StaticResource SuccessButtonStyle}"
+                                Padding="8,6" FontSize="11"
+                                Click="AddSale_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Current User Profile Footer -->
+                <Border Grid.Row="3"
+                        Background="{StaticResource CardBrush}"
+                        BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="0,1,0,0"
+                        Padding="16,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="38"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="0"
+                                Background="{StaticResource AccentBlueBrush}"
+                                CornerRadius="19"
+                                Width="34" Height="34">
+                            <TextBlock x:Name="UserAvatarLetter" Text="A"
+                                       FontSize="15" FontWeight="Bold" Foreground="White"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                            <TextBlock x:Name="UserNameTextBlock" Text="admin"
+                                       FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <Border x:Name="UserRoleBadge"
+                                    Background="#1E293B" CornerRadius="4" Padding="6,1"
+                                    HorizontalAlignment="Left" Margin="0,2,0,0">
+                                <TextBlock x:Name="UserRoleTextBlock" Text="Администратор"
+                                           FontSize="10" FontWeight="SemiBold" Foreground="{StaticResource AccentGreenBrush}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Content="↪"
+                                ToolTip="Сменить пользователя / Выйти"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Padding="8,4" FontSize="14"
+                                Click="Logout_Click"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ================= MAIN CONTENT AREA ================= -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Header Bar -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource CardBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="0,0,0,1"
+                    Padding="24,0">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="PageHeaderTitle" Text="Панель управления"
+                                   FontSize="18" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBlock x:Name="PageHeaderSubtitle" Text="Сводная аналитика, финансовые показатели и текущее состояние салона"
+                                   FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <!-- Top Action Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Content="🖨 Сводка PDF"
+                                ToolTip="Открыть печатную сводку для руководства"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Margin="0,0,8,0"
+                                Click="PrintSummaryReport_Click"/>
+                        <Button Content="📊 Полный Excel"
+                                ToolTip="Выгрузить генеральный финансовый отчёт в Excel"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Margin="0,0,8,0"
+                                Click="ExportFullFinancialReport_Click"/>
+                        <Button Content="💾 Бэкап БД"
+                                ToolTip="Создать резервную копию базы данных SQLite"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Margin="0,0,8,0"
+                                Click="BackupDb_Click"/>
+                        <Button Content="📥 Восстановить"
+                                ToolTip="Восстановить базу данных из резервной копии"
+                                Style="{StaticResource OutlineButtonStyle}"
+                                Margin="0,0,10,0"
+                                Click="RestoreDb_Click"/>
+                        <Button x:Name="TopAddButton"
+                                Content="+  Добавить авто"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="TopAddButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Page Views Host -->
+            <Grid Grid.Row="1" Margin="20,16">
+
+                <!-- ======================================================================= -->
+                <!-- 1. DASHBOARD VIEW (Zero Empty Space, 3-Column Command Center)           -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewDashboard" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: Executive Financial & Inventory Strip -->
+                    <Border Grid.Row="0" Background="{StaticResource Card2Brush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="16,10" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Background="#1E3A8A" CornerRadius="6" Padding="8,4" Margin="0,0,12,0">
+                                    <TextBlock Text="🏢 ДИЛЕРСКИЙ ЦЕНТР «DRIVE»" FontSize="11" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}"/>
+                                </Border>
+                                <TextBlock Text="Стоимость автопарка в наличии:" FontSize="12" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock x:Name="BannerStockValue" Text="0 ₽" FontSize="13.5" FontWeight="Black" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                                <TextBlock Text="Средний чек:" FontSize="12" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock x:Name="BannerAvgCheck" Text="0 ₽" FontSize="13.5" FontWeight="Black" Foreground="{StaticResource AccentGreenBrush}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+
+                                <TextBlock Text="Контрагенты:" FontSize="12" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock x:Name="BannerPartners" Text="0 клиентов • 0 поставщиков" FontSize="12.5" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="+ Автомобиль" Style="{StaticResource OutlineButtonStyle}" Padding="10,5" FontSize="11.5" Margin="0,0,6,0" Click="AddCar_Click"/>
+                                <Button Content="+ Клиент" Style="{StaticResource OutlineButtonStyle}" Padding="10,5" FontSize="11.5" Margin="0,0,6,0" Click="AddClient_Click"/>
+                                <Button Content="+ Бронь" Style="{StaticResource OutlineButtonStyle}" Padding="10,5" FontSize="11.5" Click="AddBooking_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Row 1: 5 KPI Cards with Vector Icons & Custom Icon Upload Support -->
+                    <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,14">
+                        <!-- 1. Total Cars -->
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1" CornerRadius="10" Padding="15,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="ВСЕГО АВТО В БАЗЕ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                        <TextBlock x:Name="KpiTotalCars" Text="0" FontSize="25" FontWeight="Black" Margin="0,4,0,2"/>
+                                        <TextBlock x:Name="KpiTotalCarsSub" Text="Полный реестр" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Width="40" Height="40" CornerRadius="10"
+                                            Background="#1E3A8A" BorderBrush="{StaticResource AccentBlueBrush}" BorderThickness="1"
+                                            VerticalAlignment="Top" Cursor="Hand"
+                                            Tag="kpi_cars" MouseLeftButtonUp="KpiIcon_Click"
+                                            ToolTip="Нажмите, чтобы загрузить свою иконку">
+                                        <Grid>
+                                            <Path x:Name="KpiPath_Cars" Fill="{StaticResource AccentBlueBrush}" Width="20" Height="20" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                                            <Image x:Name="KpiImg_Cars" Width="24" Height="24" Stretch="Uniform" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Border Height="3" Background="{StaticResource AccentBlueBrush}" CornerRadius="1.5" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 2. In Stock -->
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1" CornerRadius="10" Padding="15,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="В НАЛИЧИИ (ПШОУРУМ)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                        <TextBlock x:Name="KpiInStock" Text="0" FontSize="25" FontWeight="Black" Foreground="{StaticResource AccentGreenBrush}" Margin="0,4,0,2"/>
+                                        <TextBlock x:Name="KpiInStockSub" Text="Готовы к выдаче" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Width="40" Height="40" CornerRadius="10"
+                                            Background="#064E3B" BorderBrush="{StaticResource AccentGreenBrush}" BorderThickness="1"
+                                            VerticalAlignment="Top" Cursor="Hand"
+                                            Tag="kpi_instock" MouseLeftButtonUp="KpiIcon_Click"
+                                            ToolTip="Нажмите, чтобы загрузить свою иконку">
+                                        <Grid>
+                                            <Path x:Name="KpiPath_InStock" Fill="{StaticResource AccentGreenBrush}" Width="20" Height="20" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                            <Image x:Name="KpiImg_InStock" Width="24" Height="24" Stretch="Uniform" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Border Height="3" Background="{StaticResource AccentGreenBrush}" CornerRadius="1.5" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 3. Booked -->
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1" CornerRadius="10" Padding="15,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="В РЕЗЕРВЕ / БРОНИ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                        <TextBlock x:Name="KpiBooked" Text="0" FontSize="25" FontWeight="Black" Foreground="{StaticResource AccentAmberBrush}" Margin="0,4,0,2"/>
+                                        <TextBlock x:Name="KpiBookedSub" Text="Ожидают оплаты" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Width="40" Height="40" CornerRadius="10"
+                                            Background="#451A03" BorderBrush="{StaticResource AccentAmberBrush}" BorderThickness="1"
+                                            VerticalAlignment="Top" Cursor="Hand"
+                                            Tag="kpi_booked" MouseLeftButtonUp="KpiIcon_Click"
+                                            ToolTip="Нажмите, чтобы загрузить свою иконку">
+                                        <Grid>
+                                            <Path x:Name="KpiPath_Booked" Fill="{StaticResource AccentAmberBrush}" Width="20" Height="20" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                                            <Image x:Name="KpiImg_Booked" Width="24" Height="24" Stretch="Uniform" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Border Height="3" Background="{StaticResource AccentAmberBrush}" CornerRadius="1.5" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 4. Sold -->
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1" CornerRadius="10" Padding="15,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="ПРОДАНО АВТО" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                        <TextBlock x:Name="KpiSold" Text="0" FontSize="25" FontWeight="Black" Foreground="{StaticResource AccentRedBrush}" Margin="0,4,0,2"/>
+                                        <TextBlock x:Name="KpiSoldSub" Text="Завершенные сделки" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Width="40" Height="40" CornerRadius="10"
+                                            Background="#450A0A" BorderBrush="{StaticResource AccentRedBrush}" BorderThickness="1"
+                                            VerticalAlignment="Top" Cursor="Hand"
+                                            Tag="kpi_sold" MouseLeftButtonUp="KpiIcon_Click"
+                                            ToolTip="Нажмите, чтобы загрузить свою иконку">
+                                        <Grid>
+                                            <Path x:Name="KpiPath_Sold" Fill="{StaticResource AccentRedBrush}" Width="20" Height="20" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/>
+                                            <Image x:Name="KpiImg_Sold" Width="24" Height="24" Stretch="Uniform" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Border Height="3" Background="{StaticResource AccentRedBrush}" CornerRadius="1.5" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 5. Revenue -->
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1" CornerRadius="10" Padding="15,12">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="ОБЩАЯ ВЫРУЧКА" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                        <TextBlock x:Name="KpiRevenue" Text="0 ₽" FontSize="20" FontWeight="Black" Foreground="{StaticResource AccentBlueBrush}" Margin="0,6,0,4"/>
+                                        <TextBlock x:Name="KpiRevenueSub" Text="Касса автосалона" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Width="40" Height="40" CornerRadius="10"
+                                            Background="#1E3A8A" BorderBrush="{StaticResource AccentBlueBrush}" BorderThickness="1"
+                                            VerticalAlignment="Top" Cursor="Hand"
+                                            Tag="kpi_revenue" MouseLeftButtonUp="KpiIcon_Click"
+                                            ToolTip="Нажмите, чтобы загрузить свою иконку">
+                                        <Grid>
+                                            <Path x:Name="KpiPath_Revenue" Fill="{StaticResource AccentBlueBrush}" Width="20" Height="20" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                  Data="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                                            <Image x:Name="KpiImg_Revenue" Width="24" Height="24" Stretch="Uniform" Visibility="Collapsed" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <Border Height="3" Background="{StaticResource AccentBlueBrush}" CornerRadius="1.5" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Row 2: 3-Column Rich Content Area (Showroom + Analytics/Calculator + Activity Feed) -->
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="1.05*"/>
+                            <ColumnDefinition Width="0.95*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- COLUMN 0: Featured Showroom Cars + Fleet Status Breakdown -->
+                        <Grid Grid.Column="0" Margin="0,0,12,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Showroom Quick-Sell List -->
+                            <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16" Margin="0,0,0,12">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="🔥 Витрина шоурума — Готовы к продаже" FontSize="13.5" FontWeight="Bold"/>
+                                            <TextBlock Text="Быстрый переход к сделке или смене фото прямо с главной панели" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                        </StackPanel>
+                                        <Button Content="Весь каталог →" Style="{StaticResource OutlineButtonStyle}"
+                                                Padding="8,4" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                Click="OpenCatalogFromDashboard_Click"/>
+                                    </Grid>
+
+                                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl x:Name="DashboardShowroomList">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{StaticResource Card2Brush}"
+                                                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                                            CornerRadius="8" Padding="10,8" Margin="0,0,4,8">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="78"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- Car Thumbnail -->
+                                                            <Border Grid.Column="0" CornerRadius="6" ClipToBounds="True" Height="52" Background="#060A14"
+                                                                    Cursor="Hand" Tag="{Binding}" MouseLeftButtonUp="CardImage_Click"
+                                                                    ToolTip="Нажмите, чтобы сменить фото">
+                                                                <Image Source="{Binding DisplayImagePath}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                            </Border>
+
+                                                            <!-- Car Info -->
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,8,0">
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding Title}" FontSize="13" FontWeight="Bold"/>
+                                                                    <Border Background="#1E293B" CornerRadius="4" Padding="5,1" Margin="6,0,0,0" VerticalAlignment="Center">
+                                                                        <TextBlock Text="{Binding Year}" FontSize="10" Foreground="{StaticResource AccentBlueBrush}" FontWeight="Bold"/>
+                                                                    </Border>
+                                                                </StackPanel>
+                                                                <TextBlock Text="{Binding SpecsBrief}" FontSize="11" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,2"/>
+                                                                <TextBlock Text="{Binding MonthlyPaymentFormatted}" FontSize="10" Foreground="{StaticResource AccentGreenBrush}"/>
+                                                            </StackPanel>
+
+                                                            <!-- Price & Quick Sell -->
+                                                            <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                                <TextBlock Text="{Binding FormattedPrice}" FontSize="13.5" FontWeight="Black" HorizontalAlignment="Right" Margin="0,0,0,4"/>
+                                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                                    <Button Content="📷" ToolTip="Вставить фото" Style="{StaticResource OutlineButtonStyle}"
+                                                                            Padding="6,3" FontSize="10.5" Margin="0,0,4,0"
+                                                                            Tag="{Binding}" Click="CardAction_ChangePhoto"/>
+                                                                    <Button Content="Продать" Style="{StaticResource SuccessButtonStyle}"
+                                                                            Padding="8,3" FontSize="10.5"
+                                                                            Tag="{Binding}" Click="CardAction_Sell"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+
+                            <!-- Fleet Status Distribution -->
+                            <Border Grid.Row="1" Background="{StaticResource CardBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16,12">
+                                <StackPanel>
+                                    <TextBlock Text="📦 Распределение автопарка по статусам" FontSize="13" FontWeight="Bold" Margin="0,0,0,8"/>
+                                    <ItemsControl x:Name="DashboardStatusesList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="125"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="95"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Key}" FontSize="11.5"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding Percentage}" Maximum="100" Height="6"
+                                                                 Foreground="{StaticResource AccentBlueBrush}" Background="#1E293B" BorderThickness="0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding SubText}" FontSize="11" HorizontalAlignment="Right" Foreground="{StaticResource TextMutedBrush}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- COLUMN 1: Top Brands + Payment Methods + Interactive Credit Calculator -->
+                        <Grid Grid.Column="1" Margin="0,0,12,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Top Brands Card -->
+                            <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16,12" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="🏆 Топ марок автомобилей и оценка склада"
+                                               FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
+                                    <ItemsControl x:Name="TopBrandsList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,6">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="105"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="155"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Key}" FontSize="11.5" FontWeight="SemiBold"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding Percentage}" Maximum="100" Height="7"
+                                                                 Foreground="{StaticResource AccentBlueBrush}" Background="#1E293B" BorderThickness="0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding SubText}" FontSize="11"
+                                                               HorizontalAlignment="Right" Foreground="{StaticResource TextMutedBrush}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Payment Breakdown Card -->
+                            <Border Grid.Row="1" Background="{StaticResource CardBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16,12" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="💳 Способы оплаты завершенных сделок"
+                                               FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
+                                    <ItemsControl x:Name="PaymentMethodsList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,6">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="135"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="140"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Key}" FontSize="11.5"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding Percentage}" Maximum="100" Height="6"
+                                                                 Foreground="{StaticResource AccentGreenBrush}" Background="#1E293B" BorderThickness="0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding SubText}" FontSize="11"
+                                                               HorizontalAlignment="Right" FontWeight="SemiBold"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Interactive Auto Credit Calculator Widget -->
+                            <Border Grid.Row="2" Background="{StaticResource CardBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                    CornerRadius="10" Padding="16,12">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,8">
+                                        <TextBlock Text="🧮 Калькулятор автокредита для клиента" FontSize="13" FontWeight="Bold"/>
+                                        <Border Background="#1E3A8A" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                                            <TextBlock Text="Ставка 14.9% годовых" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                            <TextBlock Text="Цена авто (₽)" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,3"/>
+                                            <TextBox x:Name="CalcCarPriceBox" Text="3500000" Height="30" Padding="6,3" FontSize="12" TextChanged="CreditCalc_Changed"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" Margin="3,0,3,0">
+                                            <TextBlock Text="Первый взнос (%)" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,3"/>
+                                            <TextBox x:Name="CalcDownPaymentBox" Text="20" Height="30" Padding="6,3" FontSize="12" TextChanged="CreditCalc_Changed"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" Margin="6,0,0,0">
+                                            <TextBlock Text="Срок (мес.)" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,3"/>
+                                            <TextBox x:Name="CalcMonthsBox" Text="60" Height="30" Padding="6,3" FontSize="12" TextChanged="CreditCalc_Changed"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Border Background="{StaticResource Card2Brush}" CornerRadius="8" Padding="12,8" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="ЕЖЕМЕСЯЧНЫЙ ПЛАТЁЖ:" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                                <TextBlock x:Name="CalcMonthlyResult" Text="66 470 ₽ / мес." FontSize="17" FontWeight="Black" Foreground="{StaticResource AccentGreenBrush}" Margin="0,2,0,0"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <TextBlock x:Name="CalcLoanSumResult" Text="Кредит: 2 800 000 ₽" FontSize="11" Foreground="{StaticResource TextPrimaryBrush}" HorizontalAlignment="Right"/>
+                                                <TextBlock x:Name="CalcInitialSumResult" Text="Взнос: 700 000 ₽" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- COLUMN 2: Live Activity Log -->
+                        <Border Grid.Column="2" Background="{StaticResource CardBrush}"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="10" Padding="16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="🕒 Живая лента операций" FontSize="13.5" FontWeight="Bold"/>
+                                        <TextBlock Text="Последние действия сотрудников салона" FontSize="10.5" Foreground="{StaticResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <Button Content="Весь аудит" Style="{StaticResource OutlineButtonStyle}"
+                                            Padding="8,4" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                            Click="OpenHistoryFromDashboard_Click"/>
+                                </Grid>
+
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl x:Name="RecentHistoryList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{StaticResource Card2Brush}"
+                                                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                                        CornerRadius="7" Padding="10,7" Margin="0,0,4,7">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                                            <TextBlock Text="{Binding Action}" FontSize="11.5" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                                            <TextBlock Text="{Binding CarTitle}" FontSize="10.5" Foreground="{StaticResource AccentBlueBrush}" Margin="0,2,0,0"/>
+                                                        </StackPanel>
+                                                        <TextBlock Grid.Column="1" Text="{Binding FormattedDate}" FontSize="10"
+                                                                   Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Top"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 2. CARS CATALOG VIEW (Cards/Table + Right-Hand Vehicle Dossier Panel)   -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewCars" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Filter Bar & View Toggles -->
+                    <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14" Margin="0,0,0,14">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 1: Search, Status Filter, Brand Filter, Sort -->
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="260"/>
+                                    <ColumnDefinition Width="165"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="CarSearchBox" Grid.Column="0"
+                                         Height="36" Margin="0,0,8,0"
+                                         ToolTip="Поиск по марке, модели, VIN, кузову или двигателю"
+                                         TextChanged="CarFilter_Changed"/>
+
+                                <ComboBox x:Name="CarStatusFilter" Grid.Column="1"
+                                          Height="36" Margin="0,0,8,0"
+                                          SelectionChanged="CarFilter_Changed"/>
+
+                                <ComboBox x:Name="CarBrandFilter" Grid.Column="2"
+                                          Height="36" Margin="0,0,8,0"
+                                          SelectionChanged="CarFilter_Changed"/>
+
+                                <ComboBox x:Name="CarSortFilter" Grid.Column="3"
+                                          Height="36" Margin="0,0,8,0"
+                                          SelectionChanged="CarFilter_Changed"/>
+
+                                <Button Grid.Column="4" Content="Сбросить фильтры"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        HorizontalAlignment="Left"
+                                        Click="ResetCarFilters_Click"/>
+
+                                <StackPanel Grid.Column="5" Orientation="Horizontal">
+                                    <RadioButton x:Name="ToggleCardsView" Content="⊞  Карточки"
+                                                 Style="{StaticResource NavButtonStyle}"
+                                                 IsChecked="True" Margin="0,0,5,0"
+                                                 Click="CarViewMode_Changed"/>
+                                    <RadioButton x:Name="ToggleTableView" Content="☰  Таблица"
+                                                 Style="{StaticResource NavButtonStyle}"
+                                                 Margin="0"
+                                                 Click="CarViewMode_Changed"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Row 2: Action Buttons & Count Summary -->
+                            <Grid Grid.Row="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <Button Content="+  Добавить авто"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Margin="0,0,6,0"
+                                            Click="AddCar_Click"/>
+                                    <Button Content="✏  Редактировать"
+                                            Style="{StaticResource OutlineButtonStyle}"
+                                            Margin="0,0,6,0"
+                                            Click="EditCar_Click"/>
+                                    <Button Content="🏷  Сменить статус"
+                                            Style="{StaticResource OutlineButtonStyle}"
+                                            Margin="0,0,6,0"
+                                            Click="ChangeCarStatus_Click"/>
+                                    <Button Content="📷  Вставить фото"
+                                            Style="{StaticResource OutlineButtonStyle}"
+                                            Margin="0,0,6,0"
+                                            Click="ChangeCarPhoto_Click"/>
+                                    <Button Content="💳  Оформить продажу"
+                                            Style="{StaticResource SuccessButtonStyle}"
+                                            Margin="0,0,6,0"
+                                            Click="SellSelectedCar_Click"/>
+                                    <Button Content="🗑  Удалить"
+                                            Style="{StaticResource DangerButtonStyle}"
+                                            Click="DeleteCar_Click"/>
+                                </StackPanel>
+
+                                <TextBlock x:Name="CarsCountSummary" Grid.Column="1"
+                                           Text="Найдено: 0 авто"
+                                           FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource AccentBlueBrush}"
+                                           VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+
+                                <Button Grid.Column="2" Content="📊  Экспорт в Excel"
+                                        Style="{StaticResource OutlineButtonStyle}"
+                                        Click="ExportCarsExcel_Click"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Main Catalog Split: Left = Cards/Table, Right = Live Car Dossier Inspector -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="340"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left Side: Cards or DataGrid -->
+                        <Grid Grid.Column="0" Margin="0,0,14,0">
+                            <!-- CARDS VIEW -->
+                            <ScrollViewer x:Name="CarsCardsScrollViewer" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl x:Name="CarsCardsItemsControl">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource CardBrush}"
+                                                    BorderBrush="{StaticResource BorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="12"
+                                                    Width="272"
+                                                    Margin="0,0,12,14"
+                                                    Cursor="Hand"
+                                                    Tag="{Binding}"
+                                                    MouseLeftButtonUp="CarCard_Select">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="148"/>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+
+                                                    <!-- Image with Status Tag & Photo Insertion Overlay -->
+                                                    <Grid Grid.Row="0"
+                                                          AllowDrop="True"
+                                                          Drop="CardImage_Drop"
+                                                          Tag="{Binding}"
+                                                          ToolTip="Перетащите сюда свою картинку или нажмите «📷 Фото»">
+                                                        <Border CornerRadius="12,12,0,0" ClipToBounds="True" Background="#060A14">
+                                                            <Image Source="{Binding DisplayImagePath}"
+                                                                   Stretch="UniformToFill"
+                                                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                        </Border>
+
+                                                        <Button HorizontalAlignment="Left" VerticalAlignment="Top"
+                                                                Margin="8" Style="{StaticResource OutlineButtonStyle}"
+                                                                Padding="7,3" FontSize="10.5" Content="📷 Фото"
+                                                                Tag="{Binding}" Click="CardAction_ChangePhoto"/>
+
+                                                        <Border HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                                Margin="8" CornerRadius="6" Padding="7,3"
+                                                                Background="{Binding StatusBackground}">
+                                                            <TextBlock Text="{Binding Status}"
+                                                                       FontSize="10" FontWeight="Bold"
+                                                                       Foreground="{Binding StatusForeground}"/>
+                                                        </Border>
+                                                    </Grid>
+
+                                                    <!-- Car Specs & Body -->
+                                                    <StackPanel Grid.Row="1" Margin="14,10,14,8">
+                                                        <TextBlock Text="{Binding Title}"
+                                                                   FontSize="15.5" FontWeight="Bold"
+                                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                                   TextTrimming="CharacterEllipsis"/>
+
+                                                        <TextBlock FontSize="10.5" Foreground="{StaticResource TextMutedBrush}" Margin="0,2,0,6">
+                                                            <Run Text="{Binding Year}"/>
+                                                            <Run Text=" г.  •  "/>
+                                                            <Run Text="{Binding Vin}" FontWeight="SemiBold"/>
+                                                        </TextBlock>
+
+                                                        <TextBlock Text="{Binding SpecsBrief}"
+                                                                   FontSize="11" Foreground="{StaticResource AccentBlueBrush}"
+                                                                   TextTrimming="CharacterEllipsis"
+                                                                   Margin="0,0,0,8"/>
+
+                                                        <Grid>
+                                                            <TextBlock Text="{Binding FormattedPrice}"
+                                                                       FontSize="18.5" FontWeight="Black"
+                                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                                                            <TextBlock Text="{Binding MonthlyPaymentFormatted}"
+                                                                       FontSize="10" Foreground="{StaticResource AccentGreenBrush}"
+                                                                       HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                                        </Grid>
+                                                    </StackPanel>
+
+                                                    <!-- Action Buttons on Card -->
+                                                    <Border Grid.Row="2" Background="{StaticResource Card2Brush}"
+                                                            CornerRadius="0,0,12,12" Padding="10,8">
+                                                        <UniformGrid Columns="3">
+                                                            <Button Content="Сделка" Style="{StaticResource SuccessButtonStyle}"
+                                                                    Padding="0,5" FontSize="10.5" Margin="2,0"
+                                                                    Tag="{Binding}" Click="CardAction_Sell"/>
+                                                            <Button Content="Бронь" Style="{StaticResource OutlineButtonStyle}"
+                                                                    Padding="0,5" FontSize="10.5" Margin="2,0"
+                                                                    Tag="{Binding}" Click="CardAction_Book"/>
+                                                            <Button Content="Изменить" Style="{StaticResource OutlineButtonStyle}"
+                                                                    Padding="0,5" FontSize="10.5" Margin="2,0"
+                                                                    Tag="{Binding}" Click="CardAction_Edit"/>
+                                                        </UniformGrid>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+
+                            <!-- TABLE VIEW -->
+                            <DataGrid x:Name="CarsDataGrid"
+                                      Visibility="Collapsed"
+                                      SelectionChanged="CarsDataGrid_SelectionChanged"
+                                      MouseDoubleClick="CarsDataGrid_MouseDoubleClick">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="45"/>
+                                    <DataGridTextColumn Header="VIN" Binding="{Binding Vin}" Width="150"/>
+                                    <DataGridTextColumn Header="Марка" Binding="{Binding Brand}" Width="110"/>
+                                    <DataGridTextColumn Header="Модель" Binding="{Binding Model}" Width="135"/>
+                                    <DataGridTextColumn Header="Год" Binding="{Binding Year}" Width="60"/>
+                                    <DataGridTextColumn Header="Кузов" Binding="{Binding BodyType}" Width="105"/>
+                                    <DataGridTextColumn Header="Цвет" Binding="{Binding Color}" Width="100"/>
+                                    <DataGridTextColumn Header="Мощность" Binding="{Binding FormattedPower}" Width="85"/>
+                                    <DataGridTextColumn Header="КПП" Binding="{Binding Transmission}" Width="90"/>
+                                    <DataGridTextColumn Header="Пробег" Binding="{Binding FormattedMileage}" Width="100"/>
+                                    <DataGridTextColumn Header="Цена" Binding="{Binding FormattedPrice}" Width="125"/>
+                                    <DataGridTemplateColumn Header="Статус" Width="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border Background="{Binding StatusBackground}" CornerRadius="5" Padding="7,3" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding Status}" FontSize="11" FontWeight="Bold" Foreground="{Binding StatusForeground}"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Поставщик" Binding="{Binding SupplierName}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+
+                        <!-- Right Side: Selected Car Dossier / Inspector Panel -->
+                        <Border Grid.Column="1" Background="{StaticResource CardBrush}"
+                                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                CornerRadius="12" Padding="16">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,10">
+                                        <TextBlock Text="📋 ПАСПОРТ АВТОМОБИЛЯ" FontSize="12" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}"/>
+                                        <Border x:Name="InspectorStatusBadge" Background="#064E3B" CornerRadius="5" Padding="7,2" HorizontalAlignment="Right">
+                                            <TextBlock x:Name="InspectorStatusText" Text="В наличии" FontSize="10" FontWeight="Bold" Foreground="#34D399"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <!-- Large Car Image Preview -->
+                                    <Border CornerRadius="10" ClipToBounds="True" Height="175" Background="#060A14"
+                                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                                            Cursor="Hand" MouseLeftButtonUp="InspectorImage_Click"
+                                            ToolTip="Нажмите, чтобы изменить фотографию выбранного автомобиля">
+                                        <Image x:Name="InspectorCarImage" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Border>
+
+                                    <TextBlock x:Name="InspectorCarTitle" Text="Выберите автомобиль"
+                                               FontSize="18" FontWeight="Black" Margin="0,12,0,2" TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="InspectorCarVin" Text="VIN: —"
+                                               FontSize="11.5" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,10"/>
+
+                                    <!-- Price & Credit Box -->
+                                    <Border Background="{StaticResource Card2Brush}" CornerRadius="8" Padding="12,10"
+                                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,0,12">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBlock Text="СТОИМОСТЬ АВТОМОБИЛЯ" FontSize="9.5" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                                <TextBlock x:Name="InspectorCarPrice" Text="0 ₽" FontSize="20" FontWeight="Black" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,2,0,2"/>
+                                                <TextBlock x:Name="InspectorCarMonthly" Text="В кредит: от 0 ₽ / мес." FontSize="11" Foreground="{StaticResource AccentGreenBrush}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Technical Specs Table -->
+                                    <TextBlock Text="ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}" Margin="0,0,0,6"/>
+
+                                    <Grid Margin="0,3"><TextBlock Text="Год выпуска:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorYear" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Тип кузова:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorBody" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Цвет кузова:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorColor" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Двигатель:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorEngine" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Трансмиссия:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorTransmission" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Привод:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorDrive" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Пробег:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorMileage" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+                                    <Grid Margin="0,3"><TextBlock Text="Поставщик:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorSupplier" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis" MaxWidth="180"/></Grid>
+                                    <Grid Margin="0,3,0,14"><TextBlock Text="Дата поставки:" Foreground="{StaticResource TextMutedBrush}" FontSize="12"/><TextBlock x:Name="InspectorArrival" Text="—" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/></Grid>
+
+                                    <!-- Quick Actions for Selected Car -->
+                                    <Button Content="💳 Оформить продажу этого авто" Style="{StaticResource SuccessButtonStyle}" Margin="0,0,0,6" Click="SellSelectedCar_Click"/>
+                                    <UniformGrid Columns="2" Margin="0,0,0,6">
+                                        <Button Content="📷 Сменить фото" Style="{StaticResource OutlineButtonStyle}" Margin="0,0,3,0" Padding="8,6" FontSize="11.5" Click="ChangeCarPhoto_Click"/>
+                                        <Button Content="🏷 Статус" Style="{StaticResource OutlineButtonStyle}" Margin="3,0,0,0" Padding="8,6" FontSize="11.5" Click="ChangeCarStatus_Click"/>
+                                    </UniformGrid>
+                                    <Button Content="✏ Редактировать паспорт" Style="{StaticResource OutlineButtonStyle}" Click="EditCar_Click"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 3. CLIENTS VIEW (With KPI Strip)                                        -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewClients" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Clients KPI Strip -->
+                    <UniformGrid Grid.Row="0" Columns="3" Margin="0,0,0,12">
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="ВСЕГО КЛИЕНТОВ В БАЗЕ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="ClientsTotalCountText" Text="0" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentBlueBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="ОФОРМЛЕНО ПОКУПОК" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="ClientsWithSalesCountText" Text="0 сделок" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentGreenBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12">
+                            <StackPanel>
+                                <TextBlock Text="АКТИВНЫЕ БРОНИРОВАНИЯ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="ClientsActiveBookingsText" Text="0 броней" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentAmberBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Border Grid.Row="1" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="320"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="ClientSearchBox" Grid.Column="0" Height="36"
+                                     TextChanged="ClientSearch_Changed"/>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="+  Добавить клиента" Style="{StaticResource PrimaryButtonStyle}"
+                                        Margin="0,0,8,0" Click="AddClient_Click"/>
+                                <Button Content="✏  Редактировать" Style="{StaticResource OutlineButtonStyle}"
+                                        Margin="0,0,8,0" Click="EditClient_Click"/>
+                                <Button Content="🗑  Удалить" Style="{StaticResource DangerButtonStyle}"
+                                        Margin="0,0,8,0" Click="DeleteClient_Click"/>
+                                <Button Content="📊  Экспорт в Excel" Style="{StaticResource OutlineButtonStyle}"
+                                        Click="ExportClientsExcel_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="ClientsDataGrid" Grid.Row="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="ФИО Клиента" Binding="{Binding FullName}" Width="280"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="180"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="240"/>
+                            <DataGridTextColumn Header="Примечание и предпочтения" Binding="{Binding Comment}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 4. SALES VIEW (With Financial Strip)                                    -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewSales" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <UniformGrid Grid.Row="0" Columns="3" Margin="0,0,0,12">
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="КОЛИЧЕСТВО СДЕЛОК В ВЫБОРКЕ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="SalesCountCardText" Text="0" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentBlueBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12" Margin="0,0,10,0">
+                            <StackPanel>
+                                <TextBlock Text="СУММАРНАЯ ВЫРУЧКА" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="SalesSumCardText" Text="0 ₽" FontSize="22" FontWeight="Black" Foreground="{StaticResource AccentGreenBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12">
+                            <StackPanel>
+                                <TextBlock Text="СРЕДНИЙ ЧЕК ПРОДАЖИ" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextMutedBrush}"/>
+                                <TextBlock x:Name="SalesAvgCardText" Text="0 ₽" FontSize="22" FontWeight="Black" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Border Grid.Row="1" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="SalesSearchBox" Grid.Column="0" Height="36" Margin="0,0,10,0"
+                                     TextChanged="SalesFilter_Changed"/>
+                            <ComboBox x:Name="SalesPaymentFilter" Grid.Column="1" Height="36" Margin="0,0,10,0"
+                                      SelectionChanged="SalesFilter_Changed"/>
+
+                            <TextBlock x:Name="SalesSummaryText" Grid.Column="2"
+                                       Text="Всего сделок: 0 | Сумма: 0 ₽"
+                                       FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentGreenBrush}"
+                                       VerticalAlignment="Center" Margin="6,0"/>
+
+                            <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                <Button Content="+  Оформить продажу" Style="{StaticResource SuccessButtonStyle}"
+                                        Margin="0,0,8,0" Click="AddSale_Click"/>
+                                <Button Content="🖨  Чек / Договор сделки" Style="{StaticResource OutlineButtonStyle}"
+                                        Margin="0,0,8,0" Click="PrintSaleReceipt_Click"/>
+                                <Button Content="📊  Экспорт продаж" Style="{StaticResource OutlineButtonStyle}"
+                                        Click="ExportSalesExcel_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="SalesDataGrid" Grid.Row="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="55"/>
+                            <DataGridTextColumn Header="Дата сделки" Binding="{Binding SaleDate}" Width="120"/>
+                            <DataGridTextColumn Header="Автомобиль" Binding="{Binding CarTitle}" Width="190"/>
+                            <DataGridTextColumn Header="VIN" Binding="{Binding CarVin}" Width="170"/>
+                            <DataGridTextColumn Header="Покупатель" Binding="{Binding ClientName}" Width="200"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding ClientPhone}" Width="150"/>
+                            <DataGridTextColumn Header="Оплата" Binding="{Binding PaymentMethod}" Width="130"/>
+                            <DataGridTextColumn Header="Менеджер" Binding="{Binding ManagerLogin}" Width="110"/>
+                            <DataGridTextColumn Header="Сумма" Binding="{Binding FormattedPrice}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 5. BOOKINGS VIEW                                                        -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewBookings" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="BookingsSearchBox" Grid.Column="0" Height="36"
+                                     TextChanged="BookingsSearch_Changed"/>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="+  Новая бронь" Style="{StaticResource PrimaryButtonStyle}"
+                                        Margin="0,0,8,0" Click="AddBooking_Click"/>
+                                <Button Content="✅  Оформить в продажу" Style="{StaticResource SuccessButtonStyle}"
+                                        Margin="0,0,8,0" Click="ConvertBookingToSale_Click"/>
+                                <Button Content="❌  Снять бронь" Style="{StaticResource DangerButtonStyle}"
+                                        Click="CancelBooking_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="BookingsDataGrid" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="55"/>
+                            <DataGridTextColumn Header="Автомобиль" Binding="{Binding CarTitle}" Width="220"/>
+                            <DataGridTextColumn Header="VIN" Binding="{Binding CarVin}" Width="170"/>
+                            <DataGridTextColumn Header="Клиент" Binding="{Binding ClientName}" Width="220"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding ClientPhone}" Width="160"/>
+                            <DataGridTextColumn Header="Дата брони" Binding="{Binding BookingDate}" Width="130"/>
+                            <DataGridTextColumn Header="Срок до" Binding="{Binding ExpirationDate}" Width="130"/>
+                            <DataGridTemplateColumn Header="Статус" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{Binding StatusBackground}" CornerRadius="5" Padding="7,3" HorizontalAlignment="Center">
+                                            <TextBlock Text="{Binding StatusText}" FontSize="11" FontWeight="Bold" Foreground="White"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Менеджер" Binding="{Binding ManagerLogin}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 6. SUPPLIERS VIEW                                                       -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewSuppliers" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="14" Margin="0,0,0,12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="320"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="SupplierSearchBox" Grid.Column="0" Height="36"
+                                     TextChanged="SupplierSearch_Changed"/>
+
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                <Button Content="+  Добавить поставщика" Style="{StaticResource PrimaryButtonStyle}"
+                                        Margin="0,0,8,0" Click="AddSupplier_Click"/>
+                                <Button Content="✏  Редактировать" Style="{StaticResource OutlineButtonStyle}"
+                                        Margin="0,0,8,0" Click="EditSupplier_Click"/>
+                                <Button Content="🗑  Удалить" Style="{StaticResource DangerButtonStyle}"
+                                        Click="DeleteSupplier_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="SuppliersDataGrid" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="55"/>
+                            <DataGridTextColumn Header="Компания" Binding="{Binding Name}" Width="220"/>
+                            <DataGridTextColumn Header="Контактное лицо" Binding="{Binding ContactPerson}" Width="200"/>
+                            <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="160"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="220"/>
+                            <DataGridTextColumn Header="Юридический адрес" Binding="{Binding Address}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 7. REPORTS & EXPORT VIEW                                                -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewReports" Visibility="Collapsed">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="0,0,10,0">
+                            <TextBlock Text="Центр формирования отчётов и экспорта"
+                                       FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
+
+                            <UniformGrid Columns="2" Margin="0,0,0,20">
+                                <!-- Card 1: Full Financial Excel -->
+                                <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1" CornerRadius="12" Padding="22" Margin="0,0,10,12">
+                                    <StackPanel>
+                                        <TextBlock Text="📊 Генеральный финансовый отчёт (.xlsx)" FontSize="15" FontWeight="Bold" Foreground="{StaticResource AccentBlueBrush}"/>
+                                        <TextBlock Text="Сводка ключевых показателей салона, журнал всех совершенных сделок, складской реестр и аналитика по брендам в едином файле Excel."
+                                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,8,0,18"/>
+                                        <Button Content="Сформировать Excel отчёт" Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Left"
+                                                Click="ExportFullFinancialReport_Click"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card 2: Price List Excel -->
+                                <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1" CornerRadius="12" Padding="22" Margin="10,0,0,12">
+                                    <StackPanel>
+                                        <TextBlock Text="🚗 Прайс-лист автопарка (.xlsx)" FontSize="15" FontWeight="Bold" Foreground="{StaticResource AccentGreenBrush}"/>
+                                        <TextBlock Text="Полная выгрузка базы данных автомобилей с ценами, характеристиками, статусами, расчетом суммарной стоимости склада."
+                                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,8,0,18"/>
+                                        <Button Content="Выгрузить каталог в Excel" Style="{StaticResource SuccessButtonStyle}" HorizontalAlignment="Left"
+                                                Click="ExportCarsExcel_Click"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card 3: Sales Registry Excel -->
+                                <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1" CornerRadius="12" Padding="22" Margin="0,0,10,0">
+                                    <StackPanel>
+                                        <TextBlock Text="💳 Журнал сделок купли-продажи (.xlsx)" FontSize="15" FontWeight="Bold" Foreground="{StaticResource AccentAmberBrush}"/>
+                                        <TextBlock Text="Реестр продаж с разбивкой по методам расчетов, покупателям, менеджерам и формулой подсчета выручки."
+                                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,8,0,18"/>
+                                        <Button Content="Экспорт продаж в Excel" Style="{StaticResource OutlineButtonStyle}" HorizontalAlignment="Left"
+                                                Click="ExportSalesExcel_Click"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card 4: Printable Management Summary (PDF) -->
+                                <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                        BorderThickness="1" CornerRadius="12" Padding="22" Margin="10,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="🖨 Печатная сводка для руководства (PDF / HTML)" FontSize="15" FontWeight="Bold" Foreground="#A78BFA"/>
+                                        <TextBlock Text="Формирование документа с фирменным бланком, реквизитами ООО «Драйв Моторс» и кнопкой немедленной печати или сохранения в PDF."
+                                                   FontSize="12" Foreground="{StaticResource TextMutedBrush}" TextWrapping="Wrap" Margin="0,8,0,18"/>
+                                        <Button Content="Открыть печатную форму" Style="{StaticResource OutlineButtonStyle}" HorizontalAlignment="Left"
+                                                Click="PrintSummaryReport_Click"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+
+                            <!-- Breakdown of statuses -->
+                            <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="1" CornerRadius="12" Padding="22">
+                                <StackPanel>
+                                    <TextBlock Text="Сводные показатели склада" FontSize="14" FontWeight="Bold" Margin="0,0,0,12"/>
+                                    <ItemsControl x:Name="ReportsStatusesList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,8">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="180"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="120"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Key}" FontSize="12.5"/>
+                                                    <ProgressBar Grid.Column="1" Value="{Binding Percentage}" Maximum="100" Height="7"
+                                                                 Foreground="{StaticResource AccentBlueBrush}" Background="#1E293B" BorderThickness="0"/>
+                                                    <TextBlock Grid.Column="2" Text="{Binding SubText}" FontSize="12" HorizontalAlignment="Right" FontWeight="SemiBold"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 8. USERS VIEW                                                           -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewUsers" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="16" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Управление учетными записями сотрудников (Администрирование)"
+                                       FontSize="13" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="+  Добавить пользователя" Style="{StaticResource PrimaryButtonStyle}"
+                                        Margin="0,0,8,0" Click="AddUser_Click"/>
+                                <Button Content="🔑  Сменить пароль" Style="{StaticResource OutlineButtonStyle}"
+                                        Margin="0,0,8,0" Click="ChangeUserPassword_Click"/>
+                                <Button Content="🗑  Удалить" Style="{StaticResource DangerButtonStyle}"
+                                        Click="DeleteUser_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="UsersDataGrid" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="Логин" Binding="{Binding Login}" Width="200"/>
+                            <DataGridTextColumn Header="Роль" Binding="{Binding RoleDisplay}" Width="200"/>
+                            <DataGridTextColumn Header="Системная роль" Binding="{Binding Role}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+                <!-- ======================================================================= -->
+                <!-- 9. HISTORY VIEW                                                         -->
+                <!-- ======================================================================= -->
+                <Grid x:Name="ViewHistory" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="{StaticResource CardBrush}"
+                            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+                            CornerRadius="10" Padding="16" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="320"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="HistorySearchBox" Grid.Column="0" Height="36"
+                                     TextChanged="HistorySearch_Changed"/>
+                            <Button Grid.Column="2" Content="↻  Обновить журнал" Style="{StaticResource OutlineButtonStyle}"
+                                    Click="RefreshHistory_Click"/>
+                        </Grid>
+                    </Border>
+
+                    <DataGrid x:Name="HistoryDataGrid" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="Дата и время" Binding="{Binding FormattedDate}" Width="160"/>
+                            <DataGridTextColumn Header="Автомобиль" Binding="{Binding CarTitle}" Width="220"/>
+                            <DataGridTextColumn Header="Выполненное действие" Binding="{Binding Action}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
